@@ -33,10 +33,14 @@ def new_page(request):
     if request.method == "POST":
         title = request.POST.get("title")
         content = request.POST.get("content")
+        
         if util.get_entry(title):
-            return render(request, "encyclopedia/error.html", {"message": "A page with that title alrady exist"})
-        util.save_entry(title, content)
+            return render(request, "encyclopedia/error.html", {"message": "A page with that title already exists"})
+        formatted_content = f"# {title}\n\n{content}"
+        
+        util.save_entry(title, formatted_content)
         return redirect('entry', title=title)
+        
     return render(request, "encyclopedia/new_page.html")
 
 def edit(request, title):
